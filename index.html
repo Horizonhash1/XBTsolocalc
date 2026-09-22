@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XBT / BTCB2 — BIP110 Difficulty & Block Finder</title>
+    <meta
+      name="description"
+      content="Live Bitcoin BIP110 (XBT / BTCB2) network difficulty and a calculator for how long it takes to find a BLAKE2b block at your hashrate."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@600;700;800&family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="atmosphere" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+      <div class="hash-grid"></div>
+    </div>
+
+    <header class="site-header">
+      <a class="logo" href="#">
+        <span class="logo-mark">XBT</span>
+        <span class="logo-sub">BIP110 · BLAKE2b</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#network">Network</a>
+        <a href="#calculator">Calculator</a>
+        <a href="https://mempool.guide/" target="_blank" rel="noopener noreferrer"
+          >Explorer</a
+        >
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="hero-brand-mark" aria-label="XBT">XBT</p>
+        <p class="hero-brand">also BTCB2 · Bitcoin BIP110</p>
+        <h1>
+          How long to find a
+          <em>BLAKE2b</em> block?
+        </h1>
+        <p class="hero-lede">
+          Live difficulty for the BIP110 hardfork, and a calculator that turns
+          your hashrate into an expected solo wait.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#calculator">Open calculator</a>
+          <a class="btn btn-ghost" href="#network">See network stats</a>
+        </div>
+      </section>
+
+      <section id="network" class="network">
+        <div class="section-head">
+          <h2>Network right now</h2>
+          <p>
+            Pulled live from the BIP110 chain. Same coin as
+            <strong>XBT</strong> (NeoxEX) and <strong>BTCB2</strong> (NoKYC).
+          </p>
+          <p class="status-line" id="status-line" aria-live="polite">
+            Loading network data…
+          </p>
+        </div>
+
+        <div class="stat-rail" id="stat-rail">
+          <article class="stat">
+            <span class="stat-label">Difficulty</span>
+            <span class="stat-value" id="stat-difficulty">—</span>
+            <span class="stat-hint">network difficulty</span>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Network hashrate</span>
+            <span class="stat-value" id="stat-hashrate">—</span>
+            <span class="stat-hint">estimated from difficulty</span>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Block height</span>
+            <span class="stat-value" id="stat-height">—</span>
+            <span class="stat-hint">chain tip</span>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Block subsidy</span>
+            <span class="stat-value" id="stat-subsidy">—</span>
+            <span class="stat-hint">BTCB2 per block</span>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Avg block time</span>
+            <span class="stat-value" id="stat-blocktime">—</span>
+            <span class="stat-hint">measured recently</span>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Next retarget</span>
+            <span class="stat-value" id="stat-retarget">—</span>
+            <span class="stat-hint" id="stat-retarget-hint">every 2,016 blocks</span>
+          </article>
+        </div>
+      </section>
+
+      <section id="calculator" class="calculator">
+        <div class="section-head">
+          <h2>Block finder calculator</h2>
+          <p>
+            Enter your BLAKE2b hashrate. We estimate how long solo mining takes
+            on average to find one block at the live difficulty.
+          </p>
+        </div>
+
+        <form class="calc-panel" id="calc-form" autocomplete="off">
+          <div class="field-row">
+            <label for="hashrate">Your hashrate</label>
+            <div class="input-combo">
+              <input
+                id="hashrate"
+                name="hashrate"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="any"
+                value="4.3"
+                required
+              />
+              <select id="unit" name="unit" aria-label="Hashrate unit">
+                <option value="1e9">GH/s</option>
+                <option value="1e12" selected>TH/s</option>
+                <option value="1e15">PH/s</option>
+                <option value="1e18">EH/s</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="presets" role="group" aria-label="Hardware presets">
+            <button type="button" class="preset" data-hs="1.2e12" data-unit="1e12">
+              1.2 TH/s
+            </button>
+            <button type="button" class="preset" data-hs="4.3e12" data-unit="1e12">
+              4.3 TH/s S11
+            </button>
+            <button type="button" class="preset" data-hs="1e13" data-unit="1e12">
+              10 TH/s
+            </button>
+            <button type="button" class="preset" data-hs="1e14" data-unit="1e12">
+              100 TH/s
+            </button>
+          </div>
+
+          <div class="results" id="results">
+            <div class="result-main">
+              <span class="result-label">Average time to find a block</span>
+              <span class="result-value" id="result-wait">—</span>
+              <span class="result-note"
+                >Mean expectation for solo mining. Luck varies a lot.</span
+              >
+            </div>
+            <div class="result-grid">
+              <div>
+                <span class="result-label">Blocks / day</span>
+                <span class="result-metric" id="result-blocks-day">—</span>
+              </div>
+              <div>
+                <span class="result-label">Expected subsidy / day</span>
+                <span class="result-metric" id="result-subsidy-day">—</span>
+              </div>
+              <div>
+                <span class="result-label">Share of network</span>
+                <span class="result-metric" id="result-share">—</span>
+              </div>
+              <div>
+                <span class="result-label">Hashes to a block</span>
+                <span class="result-metric" id="result-hashes">—</span>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <aside class="formula">
+          <h3>How the math works</h3>
+          <p>
+            A block at difficulty <var>D</var> costs
+            <code>D × 2<sup>32</sup></code> hashes on average. Your wait is that
+            work divided by your hashrate:
+          </p>
+          <pre><code>solo wait      = difficulty × 2³² ÷ hashrate
+blocks per day = hashrate × 86,400 ÷ (difficulty × 2³²)
+subsidy / day  = blocks per day × block subsidy</code></pre>
+          <p class="formula-note">
+            This is independent of how fast the rest of the network is currently
+            producing blocks. Faster network block times do not change your
+            expected hashes per block — only the live difficulty does.
+          </p>
+        </aside>
+      </section>
+
+      <section class="aliases">
+        <h2>Same chain, different labels</h2>
+        <p>
+          Exchanges and explorers name this fork differently. These all point at
+          the BIP110 BLAKE2b chain that split from Bitcoin at height 961,632 and
+          switched PoW at 961,640.
+        </p>
+        <ul class="alias-list">
+          <li>
+            <span>XBT</span>
+            <small>NeoxEX market label</small>
+          </li>
+          <li>
+            <span>BTCB2</span>
+            <small>NoKYC / common ticker</small>
+          </li>
+          <li>
+            <span>BIP110</span>
+            <small>SafeTrade / project name</small>
+          </li>
+          <li>
+            <span>BLAKE2b</span>
+            <small>Proof of work since 961,640</small>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Data from
+        <a href="https://b2pool.io/api" target="_blank" rel="noopener noreferrer"
+          >b2pool.io</a
+        >
+        and
+        <a href="https://mempool.guide/" target="_blank" rel="noopener noreferrer"
+          >mempool.guide</a
+        >. Not financial advice — difficulty and hashrate change continuously.
+      </p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
