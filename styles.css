@@ -671,6 +671,64 @@ html[data-view="turbo"] .nav-turbo {
   color: var(--ink-soft);
 }
 
+.turbo-miner {
+  margin-top: 3.5rem;
+  max-width: 46rem;
+}
+
+.turbo-miner h2 {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.5vw, 2.35rem);
+  letter-spacing: -0.03em;
+}
+
+.turbo-miner > p {
+  margin: 0 0 1.25rem;
+  color: var(--ink-soft);
+}
+
+.miner-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.miner-steps li {
+  position: relative;
+  padding: 1rem 0 1rem 3.2rem;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+
+.miner-steps li::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--teal);
+}
+
+.miner-steps strong {
+  color: var(--ink);
+}
+
+.miner-steps code,
+.turbo-miner code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--teal);
+}
+
+.miner-formula {
+  margin-top: 1.25rem;
+}
+
 .site-footer {
   max-width: 1120px;
   margin: 0 auto;

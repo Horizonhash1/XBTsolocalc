@@ -313,12 +313,70 @@ subsidy / day  = blocks per day × block subsidy</code></pre>
         </form>
         <p class="formula-note turbo-note">
           Output is extendable: a shorter digest is the prefix of a longer one.
-          This is not the BIP110 proof of work — that chain mines with BLAKE2b.
           Defined in
           <a href="https://www.rfc-editor.org/rfc/rfc9861" target="_blank" rel="noopener noreferrer"
             >RFC 9861</a
           >.
         </p>
+
+        <div class="turbo-miner">
+          <h2>How the TSK miner works</h2>
+          <p>
+            <a
+              href="https://github.com/Camgirlsponsor/turboshake256-miner"
+              target="_blank"
+              rel="noopener noreferrer"
+              >turboshake256-miner</a
+            >
+            is a separate experimental chain. Its token is <strong>TSK</strong>.
+            Mining uses TurboSHAKE256. The BIP110 calculator on the other tab is
+            a different network and mines with BLAKE2b.
+          </p>
+          <ol class="miner-steps">
+            <li>
+              <strong>Build the block.</strong>
+              The node packs a coinbase of 50 TSK plus fees, then any mempool
+              transfers. The header fields are height, time, previous block
+              hash, merkle root, and difficulty.
+            </li>
+            <li>
+              <strong>Commit the header.</strong>
+              Those fields are hashed with TurboSHAKE256 and domain byte
+              <code>0x23</code>. The nonce is not in this hash. The result is a
+              32-byte commitment.
+            </li>
+            <li>
+              <strong>Search nonces.</strong>
+              Each try appends an 8-byte little-endian nonce and hashes again
+              with domain byte <code>0x24</code>. CPU threads split the nonce
+              space. A CUDA or OpenCL GPU can search the same job at the same
+              time. The first valid nonce wins.
+            </li>
+            <li>
+              <strong>Check the target.</strong>
+              The 32-byte digest is a number. It is a valid proof of work when
+              it is strictly below <code>2^(256 − difficulty)</code>. A higher
+              difficulty means more leading zero bits and more hashes per block.
+            </li>
+            <li>
+              <strong>Retarget.</strong>
+              Difficulty is adjusted every 20 blocks so blocks land near 10
+              seconds. One adjustment can move difficulty by at most 4×, and it
+              stays between 8 and 40 bits. The heaviest chain, measured as the
+              sum of <code>2^difficulty</code>, is the one nodes follow.
+            </li>
+          </ol>
+          <pre class="turbo-digest miner-formula"><code>commitment = TurboSHAKE256(header fields, D=0x23)
+digest     = TurboSHAKE256(commitment ‖ nonce, D=0x24)
+valid      = digest &lt; 2^(256 − difficulty)</code></pre>
+          <p class="formula-note turbo-note">
+            Spends are Ed25519 signatures. A <code>tsk1</code> address is the
+            first 20 bytes of TurboSHAKE256(public key) with domain
+            <code>0x25</code>. Domain bytes <code>0x06</code>, <code>0x07</code>,
+            and <code>0x0B</code> are left unused because KangarooTwelve
+            reserves them.
+          </p>
+        </div>
       </section>
     </main>
 
