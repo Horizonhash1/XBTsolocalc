@@ -1,18 +1,18 @@
 :root {
-  --ink: #0e1c22;
-  --ink-soft: #3a4f58;
-  --paper: #eef3f1;
-  --paper-2: #e2ebe7;
-  --teal: #0d8f7e;
-  --teal-deep: #06675b;
-  --amber: #c45c16;
-  --line: rgba(14, 28, 34, 0.12);
-  --glow: rgba(13, 143, 126, 0.22);
+  --ink: #f4f7f6;
+  --ink-soft: #b7c4c0;
+  --paper: #000000;
+  --paper-2: #000000;
+  --teal: #3ddec8;
+  --teal-deep: #7ef0df;
+  --amber: #f0a06a;
+  --line: rgba(244, 247, 246, 0.16);
+  --glow: rgba(61, 222, 200, 0.28);
   --font-display: "Syne", system-ui, sans-serif;
   --font-body: "Work Sans", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --radius: 6px;
-  --shadow: 0 18px 50px rgba(14, 28, 34, 0.08);
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
 }
 
 *,
@@ -23,6 +23,7 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 body {
@@ -32,10 +33,7 @@ body {
   font-family: var(--font-body);
   font-size: 1.05rem;
   line-height: 1.55;
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(13, 143, 126, 0.18), transparent 55%),
-    radial-gradient(900px 500px at 95% 5%, rgba(196, 92, 22, 0.12), transparent 50%),
-    linear-gradient(165deg, #f5f8f6 0%, var(--paper) 45%, var(--paper-2) 100%);
+  background: #000000;
   overflow-x: hidden;
 }
 
@@ -86,8 +84,8 @@ a:hover {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(14, 28, 34, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(14, 28, 34, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(244, 247, 246, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 247, 246, 0.045) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse at 50% 20%, black 20%, transparent 75%);
   animation: grid-shift 28s linear infinite;
@@ -254,8 +252,8 @@ main {
 }
 
 .btn-primary {
-  background: var(--ink);
-  color: #f4faf8;
+  background: #f4f7f6;
+  color: #000000;
 }
 
 .btn-primary:hover {
@@ -321,7 +319,7 @@ main {
   flex-direction: column;
   gap: 0.35rem;
   padding: 1.25rem 1.2rem 1.15rem;
-  background: rgba(255, 255, 255, 0.72);
+  background: #0c0c0c;
   backdrop-filter: blur(8px);
 }
 
@@ -361,7 +359,7 @@ main {
 
 .calc-panel {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.78);
+  background: #0c0c0c;
   border: 1px solid var(--line);
   border-radius: calc(var(--radius) + 4px);
   box-shadow: var(--shadow);
@@ -390,7 +388,7 @@ main {
   appearance: none;
   border: 1.5px solid var(--line);
   border-radius: var(--radius);
-  background: #fff;
+  background: #000000;
   color: var(--ink);
   font-family: var(--font-mono);
   font-size: 1.15rem;
@@ -477,6 +475,19 @@ main {
   color: var(--ink-soft);
 }
 
+.odds {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+}
+
+.odds .result-metric {
+  color: var(--teal);
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
 .result-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -519,7 +530,7 @@ main {
   padding: 1rem 1.1rem;
   overflow-x: auto;
   border-left: 3px solid var(--teal);
-  background: rgba(14, 28, 34, 0.04);
+  background: rgba(244, 247, 246, 0.05);
   border-radius: 0 var(--radius) var(--radius) 0;
 }
 
@@ -603,6 +614,7 @@ main {
 
   .stat-rail,
   .result-grid,
+  .odds,
   .alias-list {
     grid-template-columns: 1fr;
   }

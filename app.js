@@ -19,6 +19,9 @@
     resultSubsidyDay: document.getElementById("result-subsidy-day"),
     resultShare: document.getElementById("result-share"),
     resultHashes: document.getElementById("result-hashes"),
+    resultHour: document.getElementById("result-hour"),
+    resultDay: document.getElementById("result-day"),
+    resultMonth: document.getElementById("result-month"),
     presets: [...document.querySelectorAll(".preset")],
   };
 
@@ -109,6 +112,16 @@
     return `${p.toFixed(1)}%`;
   }
 
+  function formatOneIn(expectedBlocks) {
+    if (!Number.isFinite(expectedBlocks) || expectedBlocks <= 0) return "—";
+    const n = 1 / expectedBlocks;
+    let shown;
+    if (n >= 100) shown = Math.round(n).toLocaleString();
+    else if (n >= 10) shown = n.toLocaleString(undefined, { maximumFractionDigits: 1 });
+    else shown = n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    return `1 out of ${shown}`;
+  }
+
   function userHashrateHs() {
     const value = Number(els.hashrateInput.value);
     const unit = Number(els.unitSelect.value);
@@ -128,6 +141,9 @@
       els.resultHashes.textContent = difficulty
         ? formatCompact(difficulty * POW2_32, 3)
         : "—";
+      els.resultHour.textContent = "—";
+      els.resultDay.textContent = "—";
+      els.resultMonth.textContent = "—";
       return;
     }
 
@@ -150,6 +166,9 @@
     })} BTCB2`;
     els.resultShare.textContent = formatPercent(share);
     els.resultHashes.textContent = formatCompact(hashesPerBlock, 3);
+    els.resultHour.textContent = formatOneIn(blocksPerDay / 24);
+    els.resultDay.textContent = formatOneIn(blocksPerDay);
+    els.resultMonth.textContent = formatOneIn(blocksPerDay * 30);
   }
 
   function setActivePreset(button) {
@@ -247,7 +266,7 @@
     btn.addEventListener("click", () => {
       const hs = Number(btn.dataset.hs);
       const unit = Number(btn.dataset.unit);
-      els.unitSelect.value = String(unit);
+      els.unitSelect.value = btn.dataset.unit;
       els.hashrateInput.value = String(hs / unit);
       setActivePreset(btn);
       recalculate();
