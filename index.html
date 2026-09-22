@@ -15,6 +15,11 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <script>
+      if (location.hash === "#turboshake") {
+        document.documentElement.dataset.view = "turbo";
+      }
+    </script>
   </head>
   <body>
     <div class="atmosphere" aria-hidden="true">
@@ -24,13 +29,14 @@
     </div>
 
     <header class="site-header">
-      <a class="logo" href="#">
+      <a class="logo" href="#network">
         <span class="logo-mark">XBT</span>
         <span class="logo-sub">BIP110 · BLAKE2b</span>
       </a>
       <nav class="nav-links">
         <a href="#network">Network</a>
         <a href="#calculator">Calculator</a>
+        <a class="nav-turbo" href="#turboshake">TurboSHAKE256</a>
         <a href="https://mempool.guide/" target="_blank" rel="noopener noreferrer"
           >Explorer</a
         >
@@ -38,7 +44,7 @@
     </header>
 
     <main>
-      <section class="hero">
+      <section class="hero view-xbt">
         <p class="hero-brand-mark" aria-label="XBT">XBT</p>
         <p class="hero-brand">also BTCB2 · Bitcoin BIP110</p>
         <h1>
@@ -55,7 +61,7 @@
         </div>
       </section>
 
-      <section id="network" class="network">
+      <section id="network" class="network view-xbt">
         <div class="section-head">
           <h2>Network right now</h2>
           <p>
@@ -101,7 +107,7 @@
         </div>
       </section>
 
-      <section id="calculator" class="calculator">
+      <section id="calculator" class="calculator view-xbt">
         <div class="section-head">
           <h2>Block finder calculator</h2>
           <p>
@@ -209,7 +215,7 @@ subsidy / day  = blocks per day × block subsidy</code></pre>
         </aside>
       </section>
 
-      <section class="aliases">
+      <section class="aliases view-xbt">
         <h2>Same chain, different labels</h2>
         <p>
           Exchanges and explorers name this fork differently. These all point at
@@ -235,6 +241,85 @@ subsidy / day  = blocks per day × block subsidy</code></pre>
           </li>
         </ul>
       </section>
+      <section id="turboshake" class="turbo">
+        <p class="hero-brand-mark">TurboSHAKE256</p>
+        <p class="hero-brand">RFC 9861 · runs in your browser</p>
+        <h1>Twelve rounds. <em>256-bit</em> strength.</h1>
+        <p class="hero-lede">
+          TurboSHAKE256 is SHAKE256 with the Keccak permutation cut from 24
+          rounds to 12. Same rate, same capacity, about twice the speed in
+          native code. This tab hashes locally — nothing is uploaded.
+        </p>
+
+        <div class="stat-rail turbo-specs">
+          <article class="stat">
+            <span class="stat-label">Rounds</span>
+            <span class="stat-value">12</span>
+            <span class="stat-hint">SHAKE256 uses 24</span>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Security</span>
+            <span class="stat-value">256-bit</span>
+            <span class="stat-hint">same target as SHAKE256</span>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Rate</span>
+            <span class="stat-value">136 B</span>
+            <span class="stat-hint">1,088 bits per block</span>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Capacity</span>
+            <span class="stat-value">64 B</span>
+            <span class="stat-hint">512 bits</span>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Permutation</span>
+            <span class="stat-value">Keccak-p</span>
+            <span class="stat-hint">1600-bit state, 12 rounds</span>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Domain byte</span>
+            <span class="stat-value">0x1F</span>
+            <span class="stat-hint">default, range 0x01–0x7F</span>
+          </article>
+        </div>
+
+        <form class="calc-panel turbo-lab" id="turbo-form" autocomplete="off">
+          <div class="field-row">
+            <label for="turbo-message">Message</label>
+            <textarea
+              id="turbo-message"
+              rows="4"
+              spellcheck="false"
+              placeholder="Type anything. An empty message is the RFC 9861 sample."
+            ></textarea>
+          </div>
+          <div class="turbo-controls">
+            <div class="field-row">
+              <label for="turbo-domain">Domain byte</label>
+              <input id="turbo-domain" value="1F" maxlength="4" spellcheck="false" />
+            </div>
+            <div class="field-row">
+              <label for="turbo-length">Output bytes</label>
+              <input id="turbo-length" type="number" min="1" max="256" value="64" />
+            </div>
+          </div>
+          <div class="presets" role="group" aria-label="TurboSHAKE256 samples">
+            <button type="button" id="turbo-sample-empty">RFC empty message</button>
+            <button type="button" id="turbo-sample-hello">Hello, XBT</button>
+          </div>
+          <p class="status-line" id="turbo-status" aria-live="polite"></p>
+          <pre class="turbo-digest" id="turbo-digest">—</pre>
+        </form>
+        <p class="formula-note turbo-note">
+          Output is extendable: a shorter digest is the prefix of a longer one.
+          This is not the BIP110 proof of work — that chain mines with BLAKE2b.
+          Defined in
+          <a href="https://www.rfc-editor.org/rfc/rfc9861" target="_blank" rel="noopener noreferrer"
+            >RFC 9861</a
+          >.
+        </p>
+      </section>
     </main>
 
     <footer class="site-footer">
@@ -250,6 +335,7 @@ subsidy / day  = blocks per day × block subsidy</code></pre>
       </p>
     </footer>
 
+    <script src="turboshake.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
